@@ -281,7 +281,7 @@ class InputEdgeCases(unittest.IsolatedAsyncioTestCase):
 
     async def test_invisible_only_text_never_reaches_the_model(self) -> None:
         with self.assertRaises(ValueError):
-            await process_text("​﻿​", chain=scripted_chain(tool_reply()))
+            await process_text("\u200b\ufeff\u200b", chain=scripted_chain(tool_reply()))
 
     async def test_non_string_text_raises_a_clear_error(self) -> None:
         try:
@@ -316,7 +316,7 @@ class SchemaBoundaryTests(unittest.TestCase):
                     self.assertRaises(ValidationError, build)
 
     def test_invisible_only_technology_is_rejected(self) -> None:
-        for names in (["​"], ["﻿", "​​"]):
+        for names in (["\u200b"], ["\ufeff", "\u200b\u200b"]):
             with self.subTest(names=names), self.assertRaises(ValidationError):
                 TechnicalExtraction(**{**VALID_ARGS, "tecnologias": names})
 
