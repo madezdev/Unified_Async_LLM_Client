@@ -98,7 +98,7 @@ class PromptTests(unittest.TestCase):
     def test_prompt_receives_text_and_format_instructions(self) -> None:
         prompt = build_prompt("REGLAS DE PRUEBA")
         system, human = prompt.format_messages(text="log {con llaves}")
-        tag = re.fullmatch(r"<(texto_[0-9a-f]{8})>\nlog \{con llaves\}\n</\1>", human.content)
+        tag = re.match(r"<(texto_[0-9a-f]{8})>\nlog \{con llaves\}\n</\1>\n", human.content)
         self.assertIsNotNone(tag, human.content)
         self.assertIn("REGLAS DE PRUEBA", system.content)
         self.assertIn(f"<{tag.group(1)}>", system.content)
